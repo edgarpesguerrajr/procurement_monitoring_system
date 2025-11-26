@@ -80,11 +80,6 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 								<dt><b class="border-bottom border-primary">Start Date</b></dt>
 								<dd><?php echo (!empty($start_date) && strpos($start_date,'0000-00-00') === false) ? date("F d, Y", strtotime($start_date)) : 'No Specified Date'; ?></dd>
 							</dl>
-
-							<dl>
-								<dt><b class="border-bottom border-primary">Target End Date</b></dt>
-								<dd><?php echo (!empty($end_date) && strpos($end_date,'0000-00-00') === false) ? date("F d, Y", strtotime($end_date)) : 'No Specified Date'; ?></dd>
-							</dl>
 						</div>
 					</div>
 
@@ -97,7 +92,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 
 							<dl>
 								<dt><b class="border-bottom border-primary">received by BAC from BO</b></dt>
-								<dd><?php echo (!empty($received_bac_first) && strpos($received_bac_first,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($received_bac_first)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($received_bac_first) && strpos($received_bac_first,'0000-00-00') === false) ? date("d F Y | h:i A", strtotime($received_bac_first)) : 'No Specified Date'; ?></dd>
 							</dl>
 
 							<dl>

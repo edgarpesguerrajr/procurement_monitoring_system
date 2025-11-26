@@ -11,13 +11,15 @@
 
 				<!--------------------- ROW 1 --------------------->
 				<div class="row">
-					<div class="col-md-9">
+					<div class="col-md-12">
 						<div class="form-group">
 							<label class="control-label">Particulars</label>
 							<input type="text" class="form-control form-control-sm" autocomplete="off" name="particulars" value="<?= htmlspecialchars($particulars ?? '', ENT_QUOTES) ?>">
 						</div>
 					</div>
-
+				</div>
+				<!--------------------- ROW 2 --------------------->
+				<div class="row pb-3">
 					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">PR No.</label>
@@ -25,9 +27,6 @@
 						</div>
 					</div>
 
-				</div>
-				<!--------------------- ROW 2 --------------------->
-				<div class="row pb-3">
 					<div class="col-md-3">
 						<div class="form-group">
 							<label class="control-label">Amount</label>
@@ -35,19 +34,6 @@
 						</div>
 					</div>
 	
-					<div class="col-md-3">
-						<div class="form-group">
-							<label>Status</label>
-							<select name="status" id="status" class="custom-select custom-select-sm">
-								<option value="0" <?= isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-								<option value="1" <?= isset($status) && $status == 1 ? 'selected' : '' ?>>Started</option>
-								<option value="2" <?= isset($status) && $status == 2 ? 'selected' : '' ?>>On-Progress</option>
-								<option value="3" <?= isset($status) && $status == 3 ? 'selected' : '' ?>>On-Hold</option>
-								<option value="4" <?= isset($status) && $status == 4 ? 'selected' : '' ?>>Overdue</option>
-								<option value="5" <?= isset($status) && $status == 5 ? 'selected' : '' ?>>Done</option>
-							</select>
-						</div>
-					</div>
 					<div class="col-md-3">
 						<div class="form-group">
 							<label for="start_date" class="control-label">Start Date</label>
@@ -62,13 +48,15 @@
 
 					<div class="col-md-3">
 						<div class="form-group">
-							<label for="end_date" class="control-label">Target End Date</label>
-							<input type="date"
-								   id="end_date"
-								   name="end_date"
-								   class="form-control form-control-sm"
-								   autocomplete="off"
-								   value="<?= isset($end_date) && $end_date !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($end_date)), ENT_QUOTES) : '' ?>">
+							<label>Status</label>
+							<select name="status" id="status" class="custom-select custom-select-sm">
+								<option value="0" <?= isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
+								<option value="1" <?= isset($status) && $status == 1 ? 'selected' : '' ?>>Started</option>
+								<option value="2" <?= isset($status) && $status == 2 ? 'selected' : '' ?>>On-Progress</option>
+								<option value="3" <?= isset($status) && $status == 3 ? 'selected' : '' ?>>On-Hold</option>
+								<option value="4" <?= isset($status) && $status == 4 ? 'selected' : '' ?>>Overdue</option>
+								<option value="5" <?= isset($status) && $status == 5 ? 'selected' : '' ?>>Done</option>
+							</select>
 						</div>
 					</div>
 				</div>
@@ -445,14 +433,12 @@
 		var particulars = $.trim($('[name="particulars"]').val() || '');
 		var status = $('[name="status"]').val();
 		var start_date = $.trim($('[name="start_date"]').val() || '');
-		var end_date = $.trim($('[name="end_date"]').val() || '');
 
 		var missing = [];
 		if (!pr_no) missing.push('PR No.');
 		if (!particulars) missing.push('Particulars');
 		if (typeof status === 'undefined' || status === null || status === '') missing.push('Status');
 		if (!start_date) missing.push('Start Date');
-		if (!end_date) missing.push('Target End Date');
 
 		if (missing.length > 0) {
 			var msg = 'Please fill the following required fields: ' + missing.join(', ');

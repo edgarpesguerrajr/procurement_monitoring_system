@@ -11,19 +11,17 @@
 		<div class="card-body">
 			<table class="table tabe-hover table-condensed" id="list">
 				<colgroup>
-					<col width="5%">
-					<col width="35%">
+					<col width="10%">
+					<col width="50%">
 					<col width="15%">
 					<col width="15%">
-					<col width="20%">
 					<col width="10%">
 				</colgroup>
 				<thead>
 					<tr>
-						<th class="text-center">#</th>
+						<th>PR No.</th>
 						<th>Document</th>
 						<th>Date Started</th>
-						<th>Target End Date</th>
 						<th>Status</th>
 						<th>Action</th>
 					</tr>
@@ -56,13 +54,12 @@
 						endif;
 					?>
 					<tr>
-						<th class="text-center"><?php echo $i++ ?></th>
+						<th><?php echo $row['pr_no'] ?></th>
 						<td>
 							<p><b><?php echo ucwords($row['particulars']) ?></b></p>
 							<p class="truncate"><?php echo strip_tags($desc) ?></p>
 						</td>
 						<td><b><?php echo date("M d, Y",strtotime($row['start_date'])) ?></b></td>
-						<td><b><?php echo date("M d, Y",strtotime($row['end_date'])) ?></b></td>
 						<td class="text-left">
 							<?php
 							if($stat[$row['status']] =='Pending'){

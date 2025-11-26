@@ -72,9 +72,6 @@
                                             <?php echo ucwords($row['particulars']) ?>
                                         </a>
                                         <br>
-                                        <small>
-                                            Due: <?php echo date("Y-m-d", strtotime($row['end_date'])) ?>
-                                        </small>
                                     </td>
                                     <td class="project-state">
                                         <?php

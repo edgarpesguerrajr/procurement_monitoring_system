@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2025 at 02:44 AM
+-- Generation Time: Nov 27, 2025 at 03:11 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -103,7 +103,7 @@ CREATE TABLE `project_list` (
 --
 
 INSERT INTO `project_list` (`id`, `status`, `start_date`, `manager_id`, `user_ids`, `date_created`, `pr_no`, `particulars`, `amount`, `mop`, `received_bac_first`, `received_gso_first`, `procurement_type`, `remarks_pr_no`, `philgeps_posting`, `supplier`, `contract_cost`, `received_bac_second`, `bac_reso_no`, `bac_reso_date`, `received_gso_second`, `po_no`, `po_date`, `air_no`, `air_date`, `received_bo`, `return_gso_completion`, `received_bac_third`, `rfq_no`, `reposting`, `returned_gso_abstract`) VALUES
-(14, 2, '2025-12-01', 0, '', '2025-11-20 13:57:33', '0096', 'Food for \"Balikbayan Day 2025\", January 24, 2025 (6:00AM) -Tanay Municipal Grounds.', 12.00, 'repeat', '2025-11-27 08:23:00', '2025-11-27 08:55:00', 'consolidated', '18', 'With Posting', 'Gillan Marie Catering Services', 87650.00, '2025-11-27 08:23:00', '01-0005', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '2025-01-0003-100', '2025-11-27 08:23:00', '100-2025-0004', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '2025-11-27 08:54:00', '', 'Without Reposting', '2025-11-27 08:23:00');
+(14, 2, '2025-12-01', 0, '', '2025-11-20 13:57:33', '0096', 'Food for \"Balikbayan Day 2025\", January 24, 2025 (6:00AM) -Tanay Municipal Grounds.', 12000.00, 'repeat', '2025-11-27 08:23:00', '2025-11-27 08:55:00', 'consolidated', '123', 'Without Posting', 'Gillan Marie Catering Services', 87650.00, '2025-11-27 08:23:00', '01-0005', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '2025-01-0003-100', '2025-11-27 08:23:00', '100-2025-0004', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -197,7 +197,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `project_list`
 --
 ALTER TABLE `project_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `system_settings`

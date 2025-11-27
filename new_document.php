@@ -34,7 +34,7 @@
 						</div>
 					</div>
 	
-					<div class="col-md-3">
+						<div class="col-md-3">
 						<div class="form-group">
 							<label for="start_date" class="control-label">Start Date</label>
 							<input type="date"
@@ -79,24 +79,36 @@
 					<div class="col-md-3">
 						<div class="form-group">
 							<label for="received_bac_first">received by BAC from BO</label>
-							<input type="text"
-								class="form-control form-control-sm datetimepicker"
-								autocomplete="off"
-								name="received_bac_first"
-								id="received_bac_first"
-								value="<?= isset($received_bac_first) && $received_bac_first !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_bac_first)), ENT_QUOTES) : '' ?>">
+								<input type="text"
+									class="form-control form-control-sm datetimepicker"
+									autocomplete="off"
+									name="received_bac_first"
+									id="received_bac_first"
+									value="<?= isset($received_bac_first) && $received_bac_first !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_bac_first)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="received_bac_first_now" data-target="received_bac_first" <?php if(isset($received_bac_first) && $received_bac_first !== '' && strpos($received_bac_first,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="received_bac_first_now">Received</label>
+									</div>
+								</div>
 						</div>
 					</div>
 
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="received_gso_first">received by GSO</label>
-								<input type="text"
-									   class="form-control form-control-sm datetimepicker"
-									   autocomplete="off"
-									   name="received_gso_first"
-									   id="received_gso_first"
-									   value="<?= isset($received_gso_first) && $received_gso_first !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_gso_first)), ENT_QUOTES) : '' ?>">
+									<input type="text"
+										   class="form-control form-control-sm datetimepicker"
+										   autocomplete="off"
+										   name="received_gso_first"
+										   id="received_gso_first"
+										   value="<?= isset($received_gso_first) && $received_gso_first !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_gso_first)), ENT_QUOTES) : '' ?>">
+									<div class="ml-2">
+										<div class="form-check">
+											<input class="form-check-input auto-timestamp" type="checkbox" id="received_gso_first_now" data-target="received_gso_first" <?php if(isset($received_gso_first) && $received_gso_first !== '' && strpos($received_gso_first,'0000-00-00') === false) echo 'checked disabled'; ?>>
+											<label class="form-check-label small" for="received_gso_first_now">Received</label>
+										</div>
+									</div>
 							</div>
 						</div>
 
@@ -150,12 +162,18 @@
 						<div class="col-md-3">
 							<div class="form-group">
 								<label for="received_bac_third" class="control-label">received by BAC</label>
-								    <input type="text"
-									    class="form-control form-control-sm datetimepicker"
-									    autocomplete="off"
-									    name="received_bac_third"
-									    id="received_bac_third"
-									    value="<?= isset($received_bac_third) && $received_bac_third !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_bac_third)), ENT_QUOTES) : '' ?>">
+									<input type="text"
+										class="form-control form-control-sm datetimepicker"
+										autocomplete="off"
+										name="received_bac_third"
+										id="received_bac_third"
+										value="<?= isset($received_bac_third) && $received_bac_third !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_bac_third)), ENT_QUOTES) : '' ?>">
+									<div class="ml-2">
+										<div class="form-check d-inline-block">
+											<input class="form-check-input auto-timestamp" type="checkbox" id="received_bac_third_now" data-target="received_bac_third" <?php if(isset($received_bac_third) && $received_bac_third !== '' && strpos($received_bac_third,'0000-00-00') === false) echo 'checked disabled'; ?>>
+											<label class="form-check-label small" for="received_bac_third_now">Received</label>
+										</div>
+									</div>
 							</div>
 						</div>
 
@@ -189,6 +207,12 @@
 									   name="returned_gso_abstract"
 									   id="returned_gso_abstract"
 									   value="<?= isset($returned_gso_abstract) && $returned_gso_abstract !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($returned_gso_abstract)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="returned_gso_abstract_now" data-target="returned_gso_abstract" <?php if(isset($returned_gso_abstract) && $returned_gso_abstract !== '' && strpos($returned_gso_abstract,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="returned_gso_abstract_now">Received</label>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -231,6 +255,12 @@
 								   name="received_bac_second"
 								   id="received_bac_second"
 								   value="<?= isset($received_bac_second) && $received_bac_second !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_bac_second)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="received_bac_second_now" data-target="received_bac_second" <?php if(isset($received_bac_second) && $received_bac_second !== '' && strpos($received_bac_second,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="received_bac_second_now">Received</label>
+									</div>
+								</div>
 							</div>
 					</div>
 
@@ -255,6 +285,12 @@
 								   name="bac_reso_date"
 								   id="bac_reso_date"
 								   value="<?= isset($bac_reso_date) && $bac_reso_date !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($bac_reso_date)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="bac_reso_date_now" data-target="bac_reso_date" <?php if(isset($bac_reso_date) && $bac_reso_date !== '' && strpos($bac_reso_date,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="bac_reso_date_now">Received</label>
+									</div>
+								</div>
 						</div>
 					</div>
 				</div>
@@ -270,6 +306,12 @@
 								   name="received_gso_second"
 								   id="received_gso_second"
 								   value="<?= isset($received_gso_second) && $received_gso_second !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_gso_second)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="received_gso_second_now" data-target="received_gso_second" <?php if(isset($received_gso_second) && $received_gso_second !== '' && strpos($received_gso_second,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="received_gso_second_now">Received</label>
+									</div>
+								</div>
 							</div>
 					</div>
 
@@ -294,6 +336,12 @@
 								   name="po_date"
 								   id="po_date"
 								   value="<?= isset($po_date) && $po_date !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($po_date)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="po_date_now" data-target="po_date" <?php if(isset($po_date) && $po_date !== '' && strpos($po_date,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="po_date_now">Received</label>
+									</div>
+								</div>
 						</div>
 					</div>
 				</div>
@@ -321,6 +369,12 @@
 								   class="form-control form-control-sm datetimepicker"
 								   autocomplete="off"
 								   value="<?= isset($air_date) && $air_date !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($air_date)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="air_date_now" data-target="air_date" <?php if(isset($air_date) && $air_date !== '' && strpos($air_date,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="air_date_now">Received</label>
+									</div>
+								</div>
 						</div>
 					</div>
 				</div>
@@ -336,6 +390,12 @@
 								   class="form-control form-control-sm datetimepicker"
 								   autocomplete="off"
 								   value="<?= isset($received_bo) && $received_bo !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($received_bo)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="received_bo_now" data-target="received_bo" <?php if(isset($received_bo) && $received_bo !== '' && strpos($received_bo,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="received_bo_now">Received</label>
+									</div>
+								</div>
 						</div>
 					</div>
 
@@ -348,6 +408,12 @@
 								   class="form-control form-control-sm datetimepicker"
 								   autocomplete="off"
 								   value="<?= isset($return_gso_completion) && $return_gso_completion !== '' ? htmlspecialchars(date('Y/m/d H:i', strtotime($return_gso_completion)), ENT_QUOTES) : '' ?>">
+								<div class="ml-2">
+									<div class="form-check d-inline-block">
+										<input class="form-check-input auto-timestamp" type="checkbox" id="return_gso_completion_now" data-target="return_gso_completion" <?php if(isset($return_gso_completion) && $return_gso_completion !== '' && strpos($return_gso_completion,'0000-00-00') === false) echo 'checked disabled'; ?>>
+										<label class="form-check-label small" for="return_gso_completion_now">Received</label>
+									</div>
+								</div>
 						</div>
 					</div>
 				</div>
@@ -422,9 +488,78 @@
 	padding-bottom: 6px !important;
 	box-sizing: border-box !important;
 }
+
+/* Readonly datetime inputs: visually indicate non-editable and prevent pointer interaction */
+.locked-datetime[readonly] {
+    background-color: #f8f9fa !important;
+    cursor: not-allowed !important;
+}
 </style>
 
 <script>
+// Helper: return current datetime in 'Y/m/d H:i' format
+function nowFormatted(){
+	var d = new Date();
+	function z(n){return n<10?'0'+n:n}
+	var year = d.getFullYear();
+	var month = z(d.getMonth()+1);
+	var day = z(d.getDate());
+	var hours = z(d.getHours());
+	var mins = z(d.getMinutes());
+	return year + '/' + month + '/' + day + ' ' + hours + ':' + mins;
+}
+
+// Checkbox handler: when checked set target input to now and make it readonly so it's still submitted.
+$(document).on('change', '.auto-timestamp', function(){
+	var targetId = $(this).data('target');
+	if(!targetId) return;
+	var $target = $('#' + targetId);
+	if($(this).is(':checked')){
+		// set the timestamp; keep inputs readonly so only checkbox controls the value
+		$target.val(nowFormatted()).addClass('auto-filled');
+	}else{
+		// clear the value when unchecked; remain readonly (only checkbox sets it)
+		$target.removeClass('auto-filled');
+		if($target.val() && $target.val().length > 0){
+			$target.val('');
+		}
+	}
+});
+
+// If user manually edits a datetime input, uncheck the corresponding checkbox
+$(document).on('input', '.datetimepicker', function(){
+	var id = $(this).attr('id');
+	if(!id) return;
+	var cb = $('#' + id + '_now');
+	if(cb.length && cb.is(':checked')){
+		cb.prop('checked', false);
+	}
+});
+
+// Make all datetimepicker inputs readonly by default so they can only be set via checkbox
+$(function () {
+	$('.datetimepicker').each(function(){
+		// ensure input is writable by script but not editable by user
+		$(this).prop('readonly', true).addClass('locked-datetime').attr('tabindex','-1');
+	});
+	// Prevent user interaction: block mouse/touch focus and keyboard typing on locked datetime inputs
+	$(document).on('mousedown touchstart', '.datetimepicker.locked-datetime', function(e){
+		e.preventDefault();
+		// blur if somehow focused
+		try{ this.blur(); }catch(_){ }
+		return false;
+	});
+	// Prevent programmatic focus from keyboard
+	$(document).on('focusin', '.datetimepicker.locked-datetime', function(e){
+		try{ this.blur(); }catch(_){ }
+	});
+	// Prevent typing into the field
+	$(document).on('keydown', '.datetimepicker.locked-datetime', function(e){
+		e.preventDefault();
+		return false;
+	});
+});
+
 	$('#manage-project').submit(function (e) {
 		e.preventDefault()
 

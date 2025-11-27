@@ -242,19 +242,24 @@ Class Action {
 		if(!isset($particulars) || trim($particulars) === '') $required_missing[] = 'Particulars';
 		if(!isset($status) || trim($status) === '') $required_missing[] = 'Status';
 		if(!isset($start_date) || trim($start_date) === '' || $start_date === '0000-00-00') $required_missing[] = 'Start Date';
-		if(!isset($end_date) || trim($end_date) === '' || $end_date === '0000-00-00') $required_missing[] = 'Target End Date';
 		if(count($required_missing) > 0){
 			return 'Please fill required fields: '.implode(', ',$required_missing);
 		}
 		$data = "";
 		foreach($_POST as $k => $v){
 			if(!in_array($k, array('id','user_ids')) && !is_numeric($k)){
+				// Preserve description HTML entities
 				if($k == 'description')
 					$v = htmlentities(str_replace("'","&#x2019;",$v));
+				// Normalize datetime inputs from 'Y/m/d H:i' -> 'Y-m-d H:i:s' when possible
+				if(is_string($v) && preg_match('/^\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}$/', $v)){
+					$dt = DateTime::createFromFormat('Y/m/d H:i', $v);
+					if($dt) $v = $dt->format('Y-m-d H:i:s');
+				}
 				if(empty($data)){
-					$data .= " $k='$v' ";
+					$data .= " $k='".$this->db->real_escape_string($v)."' ";
 				}else{
-					$data .= ", $k='$v' ";
+					$data .= ", $k='".$this->db->real_escape_string($v)."' ";
 				}
 			}
 		}
@@ -278,36 +283,6 @@ Class Action {
 	function delete_project(){
 		extract($_POST);
 		$delete = $this->db->query("DELETE FROM project_list where id = $id");
-		if($delete){
-			return 1;
-		}
-	}
-	function save_task(){
-		extract($_POST);
-		$data = "";
-		foreach($_POST as $k => $v){
-			if(!in_array($k, array('id')) && !is_numeric($k)){
-				if($k == 'description')
-					$v = htmlentities(str_replace("'","&#x2019;",$v));
-				if(empty($data)){
-					$data .= " $k='$v' ";
-				}else{
-					$data .= ", $k='$v' ";
-				}
-			}
-		}
-		if(empty($id)){
-			$save = $this->db->query("INSERT INTO task_list set $data");
-		}else{
-			$save = $this->db->query("UPDATE task_list set $data where id = $id");
-		}
-		if($save){
-			return 1;
-		}
-	}
-	function delete_task(){
-		extract($_POST);
-		$delete = $this->db->query("DELETE FROM task_list where id = $id");
 		if($delete){
 			return 1;
 		}

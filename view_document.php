@@ -9,24 +9,12 @@ foreach($qry as $k => $v){
 $prod = isset($prod) ? $prod : 0;
 $cprog = isset($cprog) ? $cprog : 0;
 
-// Preserve explicit 'Pending' (0) unless there is actual progress or the project is overdue.
-if ($status == 0) {
-		// If there is recorded progress, mark as On-Progress
-		if ($prod > 0 || $cprog > 0) {
-				$status = 2; // On-Progress
-		} elseif (strtotime(date('Y-m-d')) > strtotime($end_date)) {
-				// If past end date and still pending, mark as Over Due
-				$status = 4; // Over Due
-		}
-		// Otherwise leave as Pending (0)
-}
 $manager = $conn->query("SELECT *,concat(firstname,' ',lastname) as name FROM users where id = $manager_id");
 $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 ?>
 <div class="col-lg-12">
 	<div class="row">
 		<div class="col-md-12">
-			<!-- Toolbar: Edit (left) and Back (right) buttons above document details -->
 			<div class="d-flex w-100 align-items-center mb-2">
 				<div>
 					<button type="button" id="back_document" class="btn btn-default btn-sm btn-flat" title="Back">
@@ -92,7 +80,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 
 							<dl>
 								<dt><b class="border-bottom border-primary">received by BAC from BO</b></dt>
-								<dd><?php echo (!empty($received_bac_first) && strpos($received_bac_first,'0000-00-00') === false) ? date("d F Y | h:i A", strtotime($received_bac_first)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($received_bac_first) && strpos($received_bac_first,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($received_bac_first)) : 'No Specified Date'; ?></dd>
 							</dl>
 
 							<dl>
@@ -109,7 +97,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 
 							<dl>
 								<dt><b class="border-bottom border-primary">Received by GSO</b></dt>
-								<dd><?php echo (!empty($received_gso_first) && strpos($received_gso_first,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($received_gso_first)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($received_gso_first) && strpos($received_gso_first,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($received_gso_first)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 
@@ -149,7 +137,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-sm-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">Received by BAC</b></dt>
-								<dd><?php echo (!empty($received_bac_third) && strpos($received_bac_third,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($received_bac_third)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($received_bac_third) && strpos($received_bac_third,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($received_bac_third)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 
@@ -171,7 +159,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-md-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">Returned to GSO for Abstract</b></dt>
-								<dd><?php echo (!empty($returned_gso_abstract) && strpos($returned_gso_abstract,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($returned_gso_abstract)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($returned_gso_abstract) && strpos($returned_gso_abstract,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($returned_gso_abstract)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 					</div>
@@ -187,7 +175,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-sm-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">Received by BAC</b></dt>
-								<dd><?php echo (!empty($received_bac_second) && strpos($received_bac_second,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($received_bac_second)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($received_bac_second) && strpos($received_bac_second,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($received_bac_second)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 
@@ -201,7 +189,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-sm-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">BAC Resolution Date</b></dt>
-								<dd><?php echo (!empty($bac_reso_date) && strpos($bac_reso_date,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($bac_reso_date)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($bac_reso_date) && strpos($bac_reso_date,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($bac_reso_date)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 					</div>
@@ -216,7 +204,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-sm-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">Received by GSO</b></dt>
-								<dd><?php echo (!empty($received_gso_second) && strpos($received_gso_second,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($received_gso_second)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($received_gso_second) && strpos($received_gso_second,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($received_gso_second)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 
@@ -230,7 +218,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-sm-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">Purchase Order Date</b></dt>
-								<dd><?php echo (!empty($po_date) && strpos($po_date,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($po_date)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($po_date) && strpos($po_date,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($po_date)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 					</div>
@@ -246,7 +234,7 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-sm-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">Air Date</b></dt>
-								<dd><?php echo (!empty($air_date) && strpos($air_date,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($air_date)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($air_date) && strpos($air_date,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($air_date)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 					</div>
@@ -261,14 +249,14 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 						<div class="col-sm-3">
 							<dl>
 								<dt><b class="border-bottom border-primary">Received by BO</b></dt>
-								<dd><?php echo (!empty($received_bo) && strpos($received_bo,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($received_bo)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($received_bo) && strpos($received_bo,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($received_bo)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 
 						<div class="col-sm-4">
 							<dl>
 								<dt><b class="border-bottom border-primary">Return to GSO for completion of Docs</b></dt>
-								<dd><?php echo (!empty($return_gso_completion) && strpos($return_gso_completion,'0000-00-00') === false) ? date("F d, Y h:i A", strtotime($return_gso_completion)) : 'No Specified Date'; ?></dd>
+								<dd><?php echo (!empty($return_gso_completion) && strpos($return_gso_completion,'0000-00-00') === false) ? date("F d, Y, h:i A", strtotime($return_gso_completion)) : 'No Specified Date'; ?></dd>
 							</dl>
 						</div>
 					</div>
@@ -397,8 +385,8 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
 
 	// Back button handler
 	$('#back_document').click(function(){
-		// prefer history back, fallback to document list
-		if(window.history.length > 1) window.history.back(); else window.location.href = './index.php?page=document_list';
+		// Always go to the document list page
+		window.location.href = './index.php?page=document_list';
 	})
 
 	// Delegate view and delete handlers for dynamic comment rows

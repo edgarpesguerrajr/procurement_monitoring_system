@@ -147,6 +147,19 @@
 			format: 'Y/m/d H:i',
 		})
 
+		// If any datetime inputs are intentionally locked (readonly via JS),
+		// destroy their datetimepicker instance so the widget won't open on focus/click.
+		// We keep the input readonly so values can still be set programmatically and submitted.
+		try{
+			$('.datetimepicker.locked-datetime').each(function(){
+				try{
+					$(this).datetimepicker('destroy');
+				}catch(_){
+					// ignore if destroy isn't supported by this plugin/version
+				}
+			});
+		}catch(_){}
+
 	})
 
 	$(".switch-toggle").bootstrapToggle();

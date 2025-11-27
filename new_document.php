@@ -129,12 +129,14 @@
 					<div class="col-md-6">
 						<div class="form-group">
 							<label for="remarks_pr_no" class="control-label">Remarks (PR No.)</label>
+							<?php $remarks_readonly = (isset($procurement_type) && $procurement_type === 'single') ? 'readonly' : '';?>
 							<input type="text"
-								   class="form-control form-control-sm"
+								   class="form-control form-control-sm" 
 								   autocomplete="off"
 								   name="remarks_pr_no"
 								   id="remarks_pr_no"
-								   value="<?= htmlspecialchars($remarks_pr_no ?? '', ENT_QUOTES) ?>">
+								   value="<?= $remarks_readonly ? '' : htmlspecialchars($remarks_pr_no ?? '', ENT_QUOTES) ?>"
+								   <?php echo $remarks_readonly; ?> >
 						</div>
 					</div>
 
@@ -494,6 +496,11 @@
     background-color: #f8f9fa !important;
     cursor: not-allowed !important;
 }
+/* Remarks locked style */
+.locked-remarks[readonly] {
+	background-color: #f8f9fa !important;
+	cursor: not-allowed !important;
+}
 </style>
 
 <script>
@@ -643,6 +650,27 @@ $(function () {
 		togglePhilgepsSection();
 		$('#philgeps_posting').on('change', function () {
 			togglePhilgepsSection();
+		});
+
+		// Remarks availability: toggle based on procurement type
+		function toggleRemarksAvailability(){
+			var val = $('#procurement_type').val();
+			var $remarks = $('#remarks_pr_no');
+			if(typeof val !== 'undefined' && val === 'single'){
+				// make readonly and clear value
+				$remarks.prop('readonly', true).addClass('locked-remarks');
+				$remarks.val('');
+				$remarks.attr('placeholder', 'Not available for Single procurement');
+			} else {
+				$remarks.prop('readonly', false).removeClass('locked-remarks');
+				$remarks.attr('placeholder', '');
+			}
+		}
+		// initialize on load
+		toggleRemarksAvailability();
+		// bind change
+		$('#procurement_type').on('change', function(){
+			toggleRemarksAvailability();
 		});
 	});
 </script>

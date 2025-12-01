@@ -8,7 +8,7 @@ Mode of Procurement
 - different form for single and consolidated
 - remove the remarks (PR no.)
 
-AIR
+AIR - done
 - add treasury and budget to receiving form
 
 Status
@@ -17,7 +17,7 @@ Status
 Highliting of done input field - done
 - change the color when the input field have already data
 
-Contract Cost
+Contract Cost - done
 - instead of supplier only, add the contract cost on the document list page
 - ex. ASUS - Php 30,500.00
 
@@ -52,9 +52,3 @@ received_mo
 received_admin
 
 cheque_no
-
-
-
-
-
-

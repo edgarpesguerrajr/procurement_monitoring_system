@@ -38,57 +38,147 @@ if(!function_exists('safeFormatDatetime')){
                         </div>
                     </div>
                 </div>
-                <!--------------------- ROW 1 --------------------->
-                <div class="row">
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="control-label">PR No.</label>
-                            <input type="text" class="form-control form-control-sm" autocomplete="off" name="pr_no" value="<?= htmlspecialchars($pr_no ?? '', ENT_QUOTES) ?>">
+                <!--------------------- SINGLE --------------------->
+                <div id="single_section" <?= (!isset($procurement_type) || $procurement_type === '' || $procurement_type === 'single') ? '' : 'style="display:none;"' ?>>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">PR No.</label>
+                                <input type="text" class="form-control form-control-sm" autocomplete="off" name="pr_no" value="<?= htmlspecialchars($pr_no ?? '', ENT_QUOTES) ?>">
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="col-md-3">
-                        <div class="form-group">
-                            <label class="control-label">Amount</label>
-                            <input type="text" class="form-control form-control-sm" autocomplete="off" name="amount" value="<?= htmlspecialchars($amount ?? '', ENT_QUOTES) ?>">
-                        </div>
-                    </div>
 
                         <div class="col-md-3">
-                        <div class="form-group">
-                            <label for="start_date" class="control-label">Start Date</label>
-                            <input type="date"
-                                id="start_date"
-                                name="start_date"
-                                class="form-control form-control-sm"
-                                autocomplete="off"
-                                value="<?= safeFormatDatetime($start_date ?? '','Y-m-d') ?>">
+                            <div class="form-group">
+                                <label class="control-label">Amount</label>
+                                <input type="text" class="form-control form-control-sm amount-input" autocomplete="off" name="amount" value="<?= htmlspecialchars($amount ?? '', ENT_QUOTES) ?>">
+                            </div>
+                        </div>
+
+                            <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="start_date" class="control-label">Start Date</label>
+                                <input type="date"
+                                    id="start_date"
+                                    name="start_date"
+                                    class="form-control form-control-sm"
+                                    autocomplete="off"
+                                    value="<?= safeFormatDatetime($start_date ?? '','Y-m-d') ?>">
+                            </div>
                         </div>
                     </div>
 
-                    <!-- <div class="col-md-3">
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select name="status" id="status" class="custom-select custom-select-sm">
-                                <option value="0" <?= isset($status) && $status == 0 ? 'selected' : '' ?>>Pending</option>
-                                <option value="1" <?= isset($status) && $status == 1 ? 'selected' : '' ?>>Started</option>
-                                <option value="2" <?= isset($status) && $status == 2 ? 'selected' : '' ?>>On-Progress</option>
-                                <option value="3" <?= isset($status) && $status == 3 ? 'selected' : '' ?>>On-Hold</option>
-                                <option value="4" <?= isset($status) && $status == 4 ? 'selected' : '' ?>>Overdue</option>
-                                <option value="5" <?= isset($status) && $status == 5 ? 'selected' : '' ?>>Done</option>
-                            </select>
-                        </div>
-                    </div> -->
-                </div>
-                <!--------------------- ROW 2 --------------------->
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label class="control-label">Particulars</label>
-                            <input type="text" class="form-control form-control-sm" autocomplete="off" name="particulars" value="<?= htmlspecialchars($particulars ?? '', ENT_QUOTES) ?>">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label">Particulars</label>
+                                <input type="text" class="form-control form-control-sm" autocomplete="off" name="particulars" value="<?= htmlspecialchars($particulars ?? '', ENT_QUOTES) ?>">
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <!--------------------- CONSOLIDATED --------------------->
+                <div id="consolidated_preview" <?= (isset($procurement_type) && $procurement_type === 'consolidated') ? '' : 'style="display:none;"' ?>>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label">Particulars</label>
+                                <input type="text" class="form-control form-control-sm" autocomplete="off" name="particulars" value="<?= htmlspecialchars($particulars ?? '', ENT_QUOTES) ?>">
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Grand Total</label>
+                                <input type="text" id="consolidated_grand_total" class="form-control form-control-sm amount-input" autocomplete="off" name="amount" value="<?= htmlspecialchars($amount ?? '', ENT_QUOTES) ?>" readonly>
+                            </div>
+                        </div>
+
+                            <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="start_date" class="control-label">Start Date</label>
+                                <input type="date"
+                                    id="start_date"
+                                    name="start_date"
+                                    class="form-control form-control-sm"
+                                    autocomplete="off"
+                                    value="<?= safeFormatDatetime($start_date ?? '','Y-m-d') ?>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Show this block only for 'consolidated' procurement_type -->
+                <div id="consolidated_section" <?= (isset($procurement_type) && $procurement_type === 'consolidated') ? '' : 'style="display:none;"' ?> >
+                    <div class="row border-top pt-3">
+                        <div class="col-sm-12">
+                            <b class="border-bottom border-primary">For Consolidated</b>
+                        </div>
+                    </div>
+
+                    <div class="row pt-3 pb-3">
+                        <div class="col-12">
+                            <!-- Header row: show labels once -->
+                            <div class="consolidated-header row mb-2 font-weight-bold align-items-center">
+                                <div class="col-md-3">PR No.</div>
+                                <div class="col-md-3">Amount</div>
+                                <div class="col-md-5">Particulars</div>
+                                <div class="col-md-1"></div>
+                            </div>
+                            <div id="consolidated_rows">
+                                <?php
+                                // Prepare arrays for existing values (backward compatible with scalar values)
+                                $pr_nos = [];
+                                $amounts = [];
+                                $parts = [];
+                                if(isset($pr_no)){
+                                    if(is_array($pr_no)) $pr_nos = $pr_no;
+                                    elseif($pr_no !== '') $pr_nos = [$pr_no];
+                                }
+                                if(isset($amount)){
+                                    if(is_array($amount)) $amounts = $amount;
+                                    elseif($amount !== '') $amounts = [$amount];
+                                }
+                                if(isset($particulars)){
+                                    if(is_array($particulars)) $parts = $particulars;
+                                    elseif($particulars !== '') $parts = [$particulars];
+                                }
+                                $max = max([count($pr_nos), count($amounts), count($parts), 1]);
+                                for($i = 0; $i < $max; $i++):
+                                ?>
+                                <div class="consolidated-row row mb-2 align-items-start">
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-0">
+                                            <input type="text" class="form-control form-control-sm" autocomplete="off" name="pr_no[]" placeholder="PR No." value="<?= htmlspecialchars($pr_nos[$i] ?? '', ENT_QUOTES) ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group mb-0">
+                                            <input type="text" class="form-control form-control-sm amount-input" autocomplete="off" name="amount[]" placeholder="Amount" value="<?= htmlspecialchars($amounts[$i] ?? '', ENT_QUOTES) ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="form-group mb-0">
+                                            <input type="text" class="form-control form-control-sm" autocomplete="off" name="particulars[]" placeholder="Particulars" value="<?= htmlspecialchars($parts[$i] ?? '', ENT_QUOTES) ?>">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-1 d-flex align-items-center justify-content-center">
+                                        <div class="btn-group btn-group-sm" role="group">
+                                            <button type="button" class="btn btn-success add-consolidated" title="Add row">+</button>
+                                            <?php if($i > 0): ?>
+                                                <button type="button" class="btn btn-danger remove-consolidated" title="Remove row">-</button>
+                                            <?php else: ?>
+                                                <button type="button" class="btn btn-danger remove-consolidated" style="display:none;" title="Remove row">-</button>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endfor; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
                 <!--------------------- ROW 3 --------------------->
                 <div class="row border-top pt-3">
                     <div class="col-md-3">
@@ -240,7 +330,7 @@ if(!function_exists('safeFormatDatetime')){
                             <input type="text"
                                    id="contract_cost"
                                    name="contract_cost"
-                                   class="form-control form-control-sm"
+                                   class="form-control form-control-sm amount-input"
                                    autocomplete="off"
                                    value="<?= htmlspecialchars($contract_cost ?? '', ENT_QUOTES) ?>">
                         </div>
@@ -631,6 +721,242 @@ if(!function_exists('safeFormatDatetime')){
 
 
             </form>
+
+            <script>
+                // Consolidated: toggle visibility, add/remove rows
+                (function($){
+                    function toggleConsolidated(){
+                        var val = $('#procurement_type').val();
+                        // If procurement type is 'consolidated' show consolidated blocks;
+                        // otherwise (including empty/no selection) show the single section by default.
+                        if(val === 'consolidated'){
+                            $('#consolidated_section').show();
+                            $('#consolidated_preview').show();
+                            $('#single_section').hide();
+                        } else {
+                            // For 'single' and for empty/no selection, show single by default
+                            $('#single_section').show();
+                            $('#consolidated_section').hide();
+                            $('#consolidated_preview').hide();
+                        }
+                    }
+
+                    function bindConsolidatedControls(){
+                        // Add new row (clone template row and clear values)
+                        $(document).on('click', '.add-consolidated', function(e){
+                            e.preventDefault();
+                            var $first = $('#consolidated_rows .consolidated-row').first();
+                            var $new = $first.clone();
+                            // clear inputs
+                            $new.find('input').val('');
+                            // show remove button
+                            $new.find('.remove-consolidated').show();
+                            // ensure first row remove button is hidden
+                            $('#consolidated_rows .consolidated-row').first().find('.remove-consolidated').hide();
+                            // append
+                            $('#consolidated_rows').append($new);
+                            // trigger formatting if available
+                            var $amt = $new.find('.amount-input');
+                            if(typeof formatInput === 'function'){
+                                $amt.each(function(){ formatInput(this); });
+                            } else {
+                                $amt.trigger('input');
+                            }
+                            // update grand total after adding a row
+                            try{ updateConsolidatedGrandTotal(); }catch(_){ }
+                        });
+
+                        // Remove a row
+                        $(document).on('click', '.remove-consolidated', function(e){
+                            e.preventDefault();
+                            var $row = $(this).closest('.consolidated-row');
+                            // do not remove if it's the only row
+                            if($('#consolidated_rows .consolidated-row').length <= 1) return;
+                            $row.remove();
+                            // ensure first row remove is hidden
+                            $('#consolidated_rows .consolidated-row').first().find('.remove-consolidated').hide();
+                            // update grand total after removing a row
+                            try{ updateConsolidatedGrandTotal(); }catch(_){ }
+                        });
+                    }
+
+                    $(function(){
+                        $('#procurement_type').on('change', toggleConsolidated);
+                        // ensure initial state (in case server-side markup didn't set it)
+                        toggleConsolidated();
+                        bindConsolidatedControls();
+                        // ensure amount-input formatting applies to existing rows
+                        if(typeof formatInput === 'function'){
+                            $('#consolidated_rows .amount-input').each(function(){ formatInput(this); });
+                        }
+                        // compute initial grand total on load
+                        try{ updateConsolidatedGrandTotal(); }catch(_){ }
+                    });
+
+                    // PHILGEPS posting toggle: require/show fields when 'With Posting', otherwise only RFQ is available
+                    function togglePhilgepsFields(){
+                        var val = $('#philgeps_posting').val();
+                        var $section = $('#philgeps_section');
+                        // field selectors inside philgeps section
+                        var $received = $section.find('#received_bac_third').closest('.col-md-3');
+                        var $rfqCol = $section.find('#rfq_no').closest('.col-md-3');
+                        var $reposting = $section.find('#reposting').closest('.col-md-3');
+                        var $returned = $section.find('#returned_gso_abstract').closest('.col-md-3');
+
+                        if(val === 'With Posting'){
+                            // show all fields and enable inputs
+                            $received.show();
+                            $rfqCol.show();
+                            $reposting.show();
+                            $returned.show();
+                            $section.find('input,select,textarea').prop('disabled', false);
+                            // set required where appropriate
+                            $section.find('#received_bac_third, #rfq_no, #reposting, #returned_gso_abstract').prop('required', true);
+                        } else {
+                            // Without Posting: only RFQ should be available
+                            $received.hide();
+                            $reposting.hide();
+                            $returned.hide();
+                            // disable all controls then enable rfq only
+                            $section.find('input,select,textarea').prop('disabled', true).prop('required', false);
+                            $section.find('#rfq_no').prop('disabled', false).prop('required', true);
+                            // clear values for hidden/disabled fields so they are not accidentally submitted
+                            $section.find('#received_bac_third, #returned_gso_abstract').val('');
+                            $section.find('#reposting').val('');
+                        }
+                    }
+
+                    // hook change and run once on load
+                    $(function(){
+                        $('#philgeps_posting').on('change', togglePhilgepsFields);
+                        togglePhilgepsFields();
+                    });
+
+                    /* Number formatting for amount inputs: thousand separators while typing
+                       Preserves caret position. Applies to any input with class `amount-input`. */
+                    function formatAmountValue(raw){
+                        if(raw === null || raw === undefined) return '';
+                        var s = String(raw);
+                        var neg = s.charAt(0) === '-';
+                        if(neg) s = s.substring(1);
+                        // remove all except digits and dot
+                        s = s.replace(/[^0-9.]/g,'');
+                        if(s === '') return neg ? '-' : '';
+                        var parts = s.split('.');
+                        var intPart = parts[0] || '0';
+                        // remove leading zeros but leave single 0
+                        intPart = intPart.replace(/^0+(?=\d)/, '');
+                        // add thousand separators
+                        intPart = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                        if(parts.length > 1){
+                            // keep any decimal fraction as-is (do not add separators there)
+                            return (neg?'-':'') + intPart + '.' + parts.slice(1).join('.');
+                        }
+                        return (neg?'-':'') + intPart;
+                    }
+
+                    function formatAmountInput(el){
+                        try{
+                            var raw = el.value || '';
+                            var start = (typeof el.selectionStart === 'number') ? el.selectionStart : raw.length;
+                            // determine if caret was after decimal and count digits before caret
+                            var left = raw.slice(0, start);
+                            var dotIndex = raw.indexOf('.');
+                            var wasAfterDecimal = dotIndex >= 0 && start > dotIndex;
+                            var digitsBeforeCaret = (left.replace(/[^0-9]/g,'') || '').length;
+                            var digitsAfterDecimal = 0;
+                            if(wasAfterDecimal){
+                                var afterPart = left.indexOf('.') >= 0 ? left.slice(left.indexOf('.')+1) : '';
+                                digitsAfterDecimal = (afterPart.replace(/[^0-9]/g,'') || '').length;
+                            }
+
+                            // plain numeric (no commas)
+                            var plain = raw.replace(/,/g,'');
+                            var formatted = formatAmountValue(plain);
+                            // set formatted value
+                            el.value = formatted;
+
+                            // now compute caret position by counting digits in formatted string
+                            if(wasAfterDecimal){
+                                var fDot = formatted.indexOf('.');
+                                if(fDot === -1){
+                                    // no decimal in formatted value — put caret at end
+                                    el.setSelectionRange(formatted.length, formatted.length);
+                                } else {
+                                    var pos = fDot + 1;
+                                    var seen = 0;
+                                    for(var i = fDot + 1; i < formatted.length; i++){
+                                        if(/[0-9]/.test(formatted.charAt(i))) seen++;
+                                        pos = i + 1;
+                                        if(seen >= digitsAfterDecimal) break;
+                                    }
+                                    if(pos > formatted.length) pos = formatted.length;
+                                    el.setSelectionRange(pos, pos);
+                                }
+                            } else {
+                                var pos = 0;
+                                var seen = 0;
+                                for(var i = 0; i < formatted.length; i++){
+                                    if(/[0-9]/.test(formatted.charAt(i))) seen++;
+                                    pos = i + 1;
+                                    if(seen >= digitsBeforeCaret) break;
+                                }
+                                if(pos > formatted.length) pos = formatted.length;
+                                el.setSelectionRange(pos, pos);
+                            }
+                        }catch(e){
+                            // fallback: do nothing
+                        }
+                    }
+
+                    // if no global formatInput exists, alias it so other code can call
+                    if(typeof window.formatInput !== 'function'){
+                        window.formatInput = function(node){ formatAmountInput(node); };
+                    }
+
+                    /* Compute consolidated grand total: sum all inputs named amount[] inside #consolidated_rows,
+                       format the total with thousand separators and two decimals, and set the readonly
+                       `#consolidated_grand_total` input's value. */
+                    function updateConsolidatedGrandTotal(){
+                        try{
+                            var total = 0;
+                            $('#consolidated_rows input[name="amount[]"]').each(function(){
+                                var v = $(this).val() || '';
+                                // strip commas
+                                v = v.replace(/,/g,'');
+                                if(v === '') return;
+                                var n = parseFloat(v);
+                                if(!isNaN(n)) total += n;
+                            });
+                            // format with two decimals when non-zero
+                            var formatted = '';
+                            if(total !== 0){
+                                formatted = formatAmountValue(total.toFixed(2));
+                            }
+                            $('#consolidated_grand_total').val(formatted);
+                        }catch(e){
+                            // noop on error
+                        }
+                    }
+
+                    // bind to input events for live formatting; also update consolidated grand total when consolidated rows change
+                    $(document).on('input', '.amount-input', function(){
+                        formatAmountInput(this);
+                        var $t = $(this);
+                        if($t.closest('#consolidated_rows').length || $t.attr('name') === 'amount[]'){
+                            updateConsolidatedGrandTotal();
+                        }
+                    });
+
+                    // strip commas before form submit so server gets plain numbers
+                    $(document).on('submit', '#manage-project', function(){
+                        $('.amount-input').each(function(){
+                            var v = $(this).val() || '';
+                            $(this).val(v.replace(/,/g,''));
+                        });
+                    });
+                })(jQuery);
+            </script>
         </div>
 
         <!--------------------- SAVE --------------------->
@@ -705,6 +1031,12 @@ if(!function_exists('safeFormatDatetime')){
 /* Remarks locked style */
 .locked-remarks[readonly] {
     background-color: #f8f9fa !important;
+    cursor: not-allowed !important;
+}
+
+/* Readonly monetary fields (grand total, contract cost) should still show text cursor
+   so users can select/copy the value even though it's not editable. */
+.amount-input[readonly] {
     cursor: not-allowed !important;
 }
 

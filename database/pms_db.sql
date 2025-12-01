@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 27, 2025 at 03:11 AM
+-- Generation Time: Dec 01, 2025 at 06:39 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -90,20 +90,31 @@ CREATE TABLE `project_list` (
   `po_date` datetime DEFAULT NULL,
   `air_no` varchar(100) DEFAULT NULL,
   `air_date` datetime DEFAULT NULL,
-  `received_bo` datetime DEFAULT NULL,
+  `received_bo_first` datetime DEFAULT NULL,
   `return_gso_completion` datetime DEFAULT NULL,
   `received_bac_third` datetime DEFAULT NULL,
   `rfq_no` varchar(100) DEFAULT NULL,
   `reposting` varchar(50) DEFAULT NULL,
-  `returned_gso_abstract` datetime DEFAULT NULL
+  `returned_gso_abstract` datetime DEFAULT NULL,
+  `received_bo_second` datetime DEFAULT NULL,
+  `received_accounting_first` datetime DEFAULT NULL,
+  `received_accounting_second` datetime DEFAULT NULL,
+  `received_treasury_first` datetime DEFAULT NULL,
+  `received_treasury_second` datetime DEFAULT NULL,
+  `received_treasury_third` datetime DEFAULT NULL,
+  `received_treasury_fourth` datetime DEFAULT NULL,
+  `received_mo` datetime DEFAULT NULL,
+  `received_admin` datetime DEFAULT NULL,
+  `cheque_no` varchar(100) DEFAULT NULL,
+  `paid` enum('yes','no') NOT NULL DEFAULT 'no'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `project_list`
 --
 
-INSERT INTO `project_list` (`id`, `status`, `start_date`, `manager_id`, `user_ids`, `date_created`, `pr_no`, `particulars`, `amount`, `mop`, `received_bac_first`, `received_gso_first`, `procurement_type`, `remarks_pr_no`, `philgeps_posting`, `supplier`, `contract_cost`, `received_bac_second`, `bac_reso_no`, `bac_reso_date`, `received_gso_second`, `po_no`, `po_date`, `air_no`, `air_date`, `received_bo`, `return_gso_completion`, `received_bac_third`, `rfq_no`, `reposting`, `returned_gso_abstract`) VALUES
-(14, 2, '2025-12-01', 0, '', '2025-11-20 13:57:33', '0096', 'Food for \"Balikbayan Day 2025\", January 24, 2025 (6:00AM) -Tanay Municipal Grounds.', 12000.00, 'repeat', '2025-11-27 08:23:00', '2025-11-27 08:55:00', 'consolidated', '123', 'Without Posting', 'Gillan Marie Catering Services', 87650.00, '2025-11-27 08:23:00', '01-0005', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '2025-01-0003-100', '2025-11-27 08:23:00', '100-2025-0004', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '2025-11-27 08:23:00', '0000-00-00 00:00:00', '', '', '0000-00-00 00:00:00');
+INSERT INTO `project_list` (`id`, `status`, `start_date`, `manager_id`, `user_ids`, `date_created`, `pr_no`, `particulars`, `amount`, `mop`, `received_bac_first`, `received_gso_first`, `procurement_type`, `remarks_pr_no`, `philgeps_posting`, `supplier`, `contract_cost`, `received_bac_second`, `bac_reso_no`, `bac_reso_date`, `received_gso_second`, `po_no`, `po_date`, `air_no`, `air_date`, `received_bo_first`, `return_gso_completion`, `received_bac_third`, `rfq_no`, `reposting`, `returned_gso_abstract`, `received_bo_second`, `received_accounting_first`, `received_accounting_second`, `received_treasury_first`, `received_treasury_second`, `received_treasury_third`, `received_treasury_fourth`, `received_mo`, `received_admin`, `cheque_no`, `paid`) VALUES
+(27, 0, '2025-01-14', 0, '', '2025-11-28 16:31:08', '0018', 'Food for \"Balikbayan Day 2025\", January 24, 2025 (6:00AM) -Tanay Municipal Grounds.', 80000.00, 'Single Value Procurement', '2025-11-28 16:30:00', '2025-11-28 16:30:00', 'consolidated', NULL, 'With Posting', 'Gillan Marie Catering Services', 70000.00, '2025-11-28 16:30:00', '2025-01-0003-100', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '100-2025-0004', '2025-11-28 16:30:00', '2025-2024', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-07', 'Without Reposting', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:30:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '1231313', 'no');
 
 -- --------------------------------------------------------
 
@@ -125,7 +136,7 @@ CREATE TABLE `system_settings` (
 --
 
 INSERT INTO `system_settings` (`id`, `name`, `email`, `contact`, `address`, `cover_img`) VALUES
-(1, 'Procurement Management System', 'info@sample.comm', '+6948 8542 623', '2102  Caldwell Road, Rochester, New York, 14608', 'wallpaper.jpeg');
+(1, 'Procurement Monitoring System', 'info@sample.comm', '+6948 8542 623', '2102  Caldwell Road, Rochester, New York, 14608', 'wallpaper.jpeg');
 
 -- --------------------------------------------------------
 
@@ -197,7 +208,7 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `project_list`
 --
 ALTER TABLE `project_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `system_settings`

@@ -131,17 +131,49 @@ if(!function_exists('safeFormatDatetime')){
                                 $pr_nos = [];
                                 $amounts = [];
                                 $parts = [];
-                                if(isset($pr_no)){
-                                    if(is_array($pr_no)) $pr_nos = $pr_no;
-                                    elseif($pr_no !== '') $pr_nos = [$pr_no];
-                                }
-                                if(isset($amount)){
-                                    if(is_array($amount)) $amounts = $amount;
-                                    elseif($amount !== '') $amounts = [$amount];
-                                }
-                                if(isset($particulars)){
-                                    if(is_array($particulars)) $parts = $particulars;
-                                    elseif($particulars !== '') $parts = [$particulars];
+                                // Attempt to load consolidated rows from database when editing an existing project
+                                $grand_total = 0;
+                                if(isset($id) && !empty($id) && isset($conn)){
+                                    $pid = intval($id);
+                                    $res = $conn->query("SELECT pr_no, amount, particulars FROM consolidated WHERE project_id = {$pid} ORDER BY id ASC");
+                                    if($res && $res->num_rows > 0){
+                                        while($row = $res->fetch_assoc()){
+                                            $pr_nos[] = $row['pr_no'];
+                                            $amounts[] = $row['amount'];
+                                            $parts[] = $row['particulars'];
+                                            $grand_total += (float)$row['amount'];
+                                        }
+                                        // set scalar amount (grand total) for preview; keep plain numeric (no commas)
+                                        $amount = $grand_total !== 0 ? number_format($grand_total,2,'.','') : ($amount ?? '');
+                                    } else {
+                                        // fallback to legacy behavior when no consolidated rows found or query failed
+                                        if(isset($pr_no)){
+                                            if(is_array($pr_no)) $pr_nos = $pr_no;
+                                            elseif($pr_no !== '') $pr_nos = [$pr_no];
+                                        }
+                                        if(isset($amount)){
+                                            if(is_array($amount)) $amounts = $amount;
+                                            elseif($amount !== '') $amounts = [$amount];
+                                        }
+                                        if(isset($particulars)){
+                                            if(is_array($particulars)) $parts = $particulars;
+                                            elseif($particulars !== '') $parts = [$particulars];
+                                        }
+                                    }
+                                } else {
+                                    // create arrays from scalar or array inputs when not editing an existing project
+                                    if(isset($pr_no)){
+                                        if(is_array($pr_no)) $pr_nos = $pr_no;
+                                        elseif($pr_no !== '') $pr_nos = [$pr_no];
+                                    }
+                                    if(isset($amount)){
+                                        if(is_array($amount)) $amounts = $amount;
+                                        elseif($amount !== '') $amounts = [$amount];
+                                    }
+                                    if(isset($particulars)){
+                                        if(is_array($particulars)) $parts = $particulars;
+                                        elseif($particulars !== '') $parts = [$particulars];
+                                    }
                                 }
                                 $max = max([count($pr_nos), count($amounts), count($parts), 1]);
                                 for($i = 0; $i < $max; $i++):

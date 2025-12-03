@@ -111,18 +111,19 @@ $manager = $manager->num_rows > 0 ? $manager->fetch_array() : array();
                                 <dt><b class="border-bottom border-primary">Status</b></dt>
                                 <dd>
                                     <?php
-                                    if ($stat[$status] == 'Pending') {
-                                        echo "<span class='badge badge-secondary'>{$stat[$status]}</span>";
-                                    } elseif ($stat[$status] == 'Started') {
-                                        echo "<span class='badge badge-primary'>{$stat[$status]}</span>";
-                                    } elseif ($stat[$status] == 'On-Progress') {
-                                        echo "<span class='badge badge-info'>{$stat[$status]}</span>";
-                                    } elseif ($stat[$status] == 'On-Hold') {
-                                        echo "<span class='badge badge-warning'>{$stat[$status]}</span>";
-                                    } elseif ($stat[$status] == 'Over Due') {
-                                        echo "<span class='badge badge-danger'>{$stat[$status]}</span>";
-                                    } elseif ($stat[$status] == 'Done') {
-                                        echo "<span class='badge badge-success'>{$stat[$status]}</span>";
+                                    include_once 'workflow_helper.php';
+                                    $ws = compute_workflow_stage($conn, (array)$qry); // $qry earlier was fetched project row
+                                    echo "<span class='badge {$ws['badge']}'>" . htmlspecialchars($ws['stage'], ENT_QUOTES) . "</span>";
+                                    // Payment status: if a cheque number exists, show Paid/Unpaid based on the `paid` checkbox
+                                    $cheque = isset($cheque_no) ? trim((string)$cheque_no) : '';
+                                    if ($cheque !== '') {
+                                        $is_paid = false;
+                                        if (isset($paid) && in_array(strtolower((string)$paid), array('1', 'yes', 'true'))) {
+                                            $is_paid = true;
+                                        }
+                                        $pbadge = $is_paid ? 'badge-success' : 'badge-danger';
+                                        $plabel = $is_paid ? 'Paid' : 'Unpaid';
+                                        echo " <br/><span class='badge {$pbadge}'>" . $plabel . "</span>";
                                     }
                                     ?>
                                 </dd>

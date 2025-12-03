@@ -34,6 +34,7 @@
                     $stat = array("Pending","Started","On-Progress","On-Hold","Over Due","Done");
                     // Show documents to all users (both Admin and Employee). Previously there were
                     // filters for manager or specific user ids; those are removed to allow global visibility.
+                    include_once 'workflow_helper.php';
                     $where = "";
                     $qry = $conn->query("SELECT * FROM project_list $where order by id asc");
                     while($row= $qry->fetch_assoc()):
@@ -95,7 +96,7 @@
                                 'procurement_type','pr_no','amount','start_date','particulars','mop','received_bac_first',
                                 'received_gso_first','philgeps_posting','rfq_no','returned_gso_abstract','supplier',
                                 'contract_cost','received_bac_second','bac_reso_no','bac_reso_date','received_gso_second',
-                                'po_no','po_date','air_no','received_treasury_first','received_bo_first','received_bo_second',
+                                'po_no','po_date','air_no','air_date','received_treasury_first','received_bo_first','received_bo_second',
                                 'return_gso_completion','received_accounting_first','received_treasury_second','received_mo',
                                 'received_treasury_third','received_admin','received_accounting_second','received_treasury_fourth',
                                 'cheque_no'
@@ -132,19 +133,20 @@
                         </td>
                         <td class="text-left">
                             <?php
-                            if($stat[$row['status']] =='Pending'){
-                                echo "<span class='badge badge-secondary'>{$stat[$row['status']]}</span>";
-                            }elseif($stat[$row['status']] =='Started'){
-                                echo "<span class='badge badge-primary'>{$stat[$row['status']]}</span>";
-                            }elseif($stat[$row['status']] =='On-Progress'){
-                                echo "<span class='badge badge-info'>{$stat[$row['status']]}</span>";
-                            }elseif($stat[$row['status']] =='On-Hold'){
-                                echo "<span class='badge badge-warning'>{$stat[$row['status']]}</span>";
-                            }elseif($stat[$row['status']] =='Over Due'){
-                                echo "<span class='badge badge-danger'>{$stat[$row['status']]}</span>";
-                            }elseif($stat[$row['status']] =='Done'){
-                                echo "<span class='badge badge-success'>{$stat[$row['status']]}</span>";
-                            }
+                                // compute workflow stage from filled fields
+                                $ws = compute_workflow_stage($conn, $row);
+                                echo "<span class='badge {$ws['badge']}'>" . htmlspecialchars($ws['stage'], ENT_QUOTES) . "</span>";
+                                // Payment status: if cheque_no exists show Paid/Unpaid based on the `paid` checkbox
+                                $cheque = isset($row['cheque_no']) ? trim((string)$row['cheque_no']) : '';
+                                if ($cheque !== '') {
+                                    $is_paid = false;
+                                    if (isset($row['paid']) && in_array(strtolower((string)$row['paid']), array('1', 'yes', 'true'))) {
+                                        $is_paid = true;
+                                    }
+                                    $pclass = $is_paid ? 'badge-success' : 'badge-danger';
+                                    $plabel = $is_paid ? 'Paid' : 'Unpaid';
+                                    echo " <br/><span class='badge {$pclass}'>" . $plabel . "</span>";
+                                }
                             ?>
                         </td>
                         <td class="text-center">

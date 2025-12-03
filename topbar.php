@@ -23,10 +23,8 @@
                 <span class="dropdown-item dropdown-header">Notifications</span>
                 <div class="dropdown-divider"></div>
                 <div id="notif-items" style="max-height:240px;overflow:auto">
-                    <a class="dropdown-item text-center text-muted">No notifications</a>
+                    <a class="dropdown-item text-center text-muted"><div class="badge badge-danger">Soon</div></a>
                 </div>
-                <div class="dropdown-divider"></div>
-                <a href="./index.php?page=document_list" class="dropdown-item dropdown-footer">View all</a>
             </div>
         </li>
         <!-- Dark mode toggle -->
@@ -92,6 +90,23 @@
 
     // Notifications loader
     (function(){
+        // Small HTML-escape helper to avoid XSS and prevent undefined-function errors
+        function escapeHtml(text){
+            if (text === null || text === undefined) return '';
+            return String(text).replace(/[&<>"'`=\/]/g, function (s) {
+                return ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;',
+                    '`': '&#x60;',
+                    '/': '&#x2F;',
+                    '=': '&#x3D;'
+                })[s];
+            });
+        }
+
         function renderItems(items){
             var $c = $('#notif-items');
             $c.empty();
@@ -130,6 +145,7 @@
                 method: 'GET',
                 dataType: 'json',
                 success: function(resp){
+                    console.debug('Notifications AJAX response:', resp);
                     try{ renderItems(resp); }catch(e){ console.error(e); }
                 },
                 error: function(){

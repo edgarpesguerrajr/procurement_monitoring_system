@@ -20,6 +20,26 @@ Class Action
         ob_end_flush();
     }
 
+    /**
+     * Ensure notifications table exists. Run safely and ignore failures.
+     */
+    private function ensureNotificationsTableExists(){
+        try{
+            $sql = "CREATE TABLE IF NOT EXISTS notifications (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id INT NOT NULL,
+                actor_id INT NOT NULL,
+                project_id INT NOT NULL,
+                message TEXT,
+                is_read TINYINT(1) DEFAULT 0,
+                created_at DATETIME
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4";
+            @$this->db->query($sql);
+        }catch(Exception $_){
+            // ignore
+        }
+    }
+
     function login()
     {
         extract($_POST);
@@ -448,7 +468,45 @@ Class Action
                 } else {
                     try { $this->db->query("DELETE FROM consolidated WHERE project_id = {$newId}"); } catch (Exception $_) { }
                 }
-                return $newId;
+                // Create notifications to inform other users that this document was created
+                if (isset($_SESSION['login_id'])) {
+                    $actor_id = intval($_SESSION['login_id']);
+                    $actor_q = $this->db->query("SELECT concat(firstname,' ',lastname) as name FROM users WHERE id = {$actor_id} LIMIT 1");
+                    $actor = ($actor_q && $actor_q->num_rows > 0) ? $actor_q->fetch_array()['name'] : 'User';
+                    // determine a human-friendly document label
+                    $doc_label = '';
+                    $pqr = $this->db->query("SELECT particulars, pr_no FROM project_list WHERE id = " . intval($newId) . " LIMIT 1");
+                    if ($pqr && $pqr->num_rows > 0) {
+                        $prow = $pqr->fetch_assoc();
+                        $doc_label = trim((string)($prow['particulars'] ?? ''));
+                        if ($doc_label === '') {
+                            $doc_label = trim((string)($prow['pr_no'] ?? ''));
+                        }
+                    }
+                    if ($doc_label === '') {
+                        $cres = $this->db->query("SELECT pr_no FROM consolidated WHERE project_id = " . intval($newId) . " AND pr_no <> '' LIMIT 1");
+                        if ($cres && $cres->num_rows > 0) {
+                            $doc_label = trim((string)$cres->fetch_assoc()['pr_no']);
+                        }
+                    }
+                    if ($doc_label === '') $doc_label = 'Document #' . intval($newId);
+
+                    $dt_n = date('Y-m-d H:i:s');
+                    $message = $this->db->real_escape_string("{$actor} has an update in {$doc_label}");
+                    // ensure notifications table exists (safe)
+                    $this->ensureNotificationsTableExists();
+                    // notify users, but ignore failures
+                    try{
+                        $users = $this->db->query("SELECT id FROM users");
+                        if ($users) {
+                            while ($u = $users->fetch_assoc()) {
+                                $rid = intval($u['id']);
+                                if ($rid === $actor_id) continue;
+                                @$this->db->query("INSERT INTO notifications (user_id, actor_id, project_id, message, is_read, created_at) VALUES ({$rid}, {$actor_id}, " . intval($newId) . ", '{$message}', 0, '{$dt_n}')");
+                            }
+                        }
+                    }catch(Exception $_){ }
+                }
             } else {
                 return 'DB Error: ' . $this->db->error . ' -- Query: ' . $query;
             }
@@ -468,6 +526,45 @@ Class Action
                     try { $this->syncConsolidatedRows($id); } catch (Exception $_) { }
                 } else {
                     try { $this->db->query("DELETE FROM consolidated WHERE project_id = {$id}"); } catch (Exception $_) { }
+                }
+                // Create notifications to inform other users that this document was updated
+                if (isset($_SESSION['login_id'])) {
+                    $actor_id = intval($_SESSION['login_id']);
+                    $actor_q = $this->db->query("SELECT concat(firstname,' ',lastname) as name FROM users WHERE id = {$actor_id} LIMIT 1");
+                    $actor = ($actor_q && $actor_q->num_rows > 0) ? $actor_q->fetch_array()['name'] : 'User';
+                    // determine a human-friendly document label
+                    $doc_label = '';
+                    $pqr = $this->db->query("SELECT particulars, pr_no FROM project_list WHERE id = " . intval($id) . " LIMIT 1");
+                    if ($pqr && $pqr->num_rows > 0) {
+                        $prow = $pqr->fetch_assoc();
+                        $doc_label = trim((string)($prow['particulars'] ?? ''));
+                        if ($doc_label === '') {
+                            $doc_label = trim((string)($prow['pr_no'] ?? ''));
+                        }
+                    }
+                    if ($doc_label === '') {
+                        $cres = $this->db->query("SELECT pr_no FROM consolidated WHERE project_id = " . intval($id) . " AND pr_no <> '' LIMIT 1");
+                        if ($cres && $cres->num_rows > 0) {
+                            $doc_label = trim((string)$cres->fetch_assoc()['pr_no']);
+                        }
+                    }
+                    if ($doc_label === '') $doc_label = 'Document #' . intval($id);
+
+                    $dt_n = date('Y-m-d H:i:s');
+                    $message = $this->db->real_escape_string("{$actor} has an update in {$doc_label}");
+                    // ensure notifications table exists (safe)
+                    $this->ensureNotificationsTableExists();
+                    // notify users, but ignore failures
+                    try{
+                        $users = $this->db->query("SELECT id FROM users");
+                        if ($users) {
+                            while ($u = $users->fetch_assoc()) {
+                                $rid = intval($u['id']);
+                                if ($rid === $actor_id) continue;
+                                @$this->db->query("INSERT INTO notifications (user_id, actor_id, project_id, message, is_read, created_at) VALUES ({$rid}, {$actor_id}, " . intval($id) . ", '{$message}', 0, '{$dt_n}')");
+                            }
+                        }
+                    }catch(Exception $_){ }
                 }
                 return intval($id);
             } else {
@@ -536,47 +633,49 @@ Class Action
         $dt = date('Y-m-d H:i:s');
         $save = $this->db->query("INSERT INTO comments (project_id,user_id,comment,date_created) VALUES ('{$project_id}','{$uid}','{$comment}','{$dt}')");
         if ($save) {
-            // Ensure notifications table exists
-            $this->db->query("CREATE TABLE IF NOT EXISTS notifications (
-                id INT AUTO_INCREMENT PRIMARY KEY,
-                user_id INT NOT NULL,
-                actor_id INT NOT NULL,
-                project_id INT NOT NULL,
-                message TEXT,
-                is_read TINYINT(1) DEFAULT 0,
-                created_at DATETIME
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+            // Ensure notifications table exists (safe)
+            $this->ensureNotificationsTableExists();
 
-            // Build notification message: "[user] commented on PR no. [pr_no]"
+            // Build notification message: "[User] has a comment in [document]"
             $actor_q = $this->db->query("SELECT concat(firstname,' ',lastname) as name FROM users WHERE id = {$uid} LIMIT 1");
             $actor = ($actor_q && $actor_q->num_rows > 0) ? $actor_q->fetch_array()['name'] : 'User';
 
-            // determine PR no for the project (prefer project_list.pr_no; fallback to first consolidated pr_no)
-            $pr_no = '';
-            $pqr = $this->db->query("SELECT pr_no FROM project_list WHERE id = " . intval($project_id) . " LIMIT 1");
+            // determine a human-friendly document label: prefer particulars, then pr_no, then consolidated pr_no
+            $doc_label = '';
+            $pqr = $this->db->query("SELECT particulars, pr_no FROM project_list WHERE id = " . intval($project_id) . " LIMIT 1");
             if ($pqr && $pqr->num_rows > 0) {
                 $prow = $pqr->fetch_assoc();
-                $pr_no = trim((string)($prow['pr_no'] ?? ''));
+                $doc_label = trim((string)($prow['particulars'] ?? ''));
+                if ($doc_label === '') {
+                    $doc_label = trim((string)($prow['pr_no'] ?? ''));
+                }
             }
-            if ($pr_no === '') {
+            if ($doc_label === '') {
                 $cres = $this->db->query("SELECT pr_no FROM consolidated WHERE project_id = " . intval($project_id) . " AND pr_no <> '' LIMIT 1");
                 if ($cres && $cres->num_rows > 0) {
-                    $pr_no = trim((string)$cres->fetch_assoc()['pr_no']);
+                    $doc_label = trim((string)$cres->fetch_assoc()['pr_no']);
                 }
             }
-            $pr_no_display = $pr_no !== '' ? $pr_no : '&ndash;';
-            $message = $this->db->real_escape_string("{$actor} commented on PR no. {$pr_no_display}");
+            if ($doc_label === '') $doc_label = 'Document #' . intval($project_id);
 
-            // Insert notification for all users except the actor
-            $users = $this->db->query("SELECT id FROM users");
-            if ($users) {
-                while ($u = $users->fetch_assoc()) {
-                    $rid = intval($u['id']);
-                    if ($rid === intval($uid)) continue; // skip sender
-                    $this->db->query("INSERT INTO notifications (user_id, actor_id, project_id, message, is_read, created_at) VALUES ({$rid}, {$uid}, " . intval($project_id) . ", '{$message}', 0, '{$dt}')");
+            $message = $this->db->real_escape_string("{$actor} has a comment in {$doc_label}");
+
+            // ensure notifications table exists (safe)
+            $this->ensureNotificationsTableExists();
+            // notify users, but ignore failures
+            $dt_n = date('Y-m-d H:i:s');
+            try{
+                $users = $this->db->query("SELECT id FROM users");
+                if ($users) {
+                    while ($u = $users->fetch_assoc()) {
+                        $rid = intval($u['id']);
+                        if ($rid === intval($uid)) continue;
+                        @$this->db->query("INSERT INTO notifications (user_id, actor_id, project_id, message, is_read, created_at) VALUES ({$rid}, {$uid}, " . intval($project_id) . ", '{$message}', 0, '{$dt_n}')");
+                    }
                 }
-            }
+            }catch(Exception $_){ }
 
+            // notifications processed; return success for comment save
             return 1;
         }
         return 0;

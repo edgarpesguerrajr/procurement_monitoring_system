@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 02, 2025 at 02:16 AM
+-- Generation Time: Dec 03, 2025 at 03:49 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -35,6 +35,15 @@ CREATE TABLE `comments` (
   `date_created` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `comments`
+--
+
+INSERT INTO `comments` (`id`, `project_id`, `user_id`, `comment`, `date_created`) VALUES
+(29, 36, 6, 'testing by BO\r\n', '2025-12-02 13:45:32'),
+(30, 36, 1, 'testing by admin', '2025-12-02 13:45:58'),
+(31, 27, 1, 'sample comment', '2025-12-02 16:00:18');
+
 -- --------------------------------------------------------
 
 --
@@ -51,6 +60,41 @@ CREATE TABLE `consolidated` (
   `row_order` int(11) DEFAULT NULL,
   `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `consolidated`
+--
+
+INSERT INTO `consolidated` (`id`, `project_id`, `pr_no`, `amount`, `particular`, `grand_total`, `row_order`, `created_at`) VALUES
+(78, 36, '0017', 469636.00, 'ADVOCACY SHIRT FOR MUNICIPAL POPULATION DEVELOPMENT PROGRAM QUARTERLY CONSULTATIVE MEETING ORIENTATION OF BARANGAY POPULATION VOLUNTEER WORKER  FEBRUARY 2025', 481957.00, 1, '2025-12-03 10:31:35'),
+(79, 36, '0101', 12321.00, 'Food for FAMILIARIZATION TOUR: \"Balikbayan and OFWs Day Tour\", January 25, 2025.', 481957.00, 2, '2025-12-03 10:31:35'),
+(80, 27, '0018', 80000.00, 'PR1', 80000.00, 1, '2025-12-03 10:44:49'),
+(81, 27, '0099', NULL, '', 80000.00, 2, '2025-12-03 10:44:49');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `actor_id` int(11) NOT NULL,
+  `project_id` int(11) NOT NULL,
+  `message` text DEFAULT NULL,
+  `is_read` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `notifications`
+--
+
+INSERT INTO `notifications` (`id`, `user_id`, `actor_id`, `project_id`, `message`, `is_read`, `created_at`) VALUES
+(1, 6, 1, 27, 'Administrator  commented on PR no. 0018', 0, '2025-12-02 16:00:18'),
+(2, 9, 1, 27, 'Administrator  commented on PR no. 0018', 0, '2025-12-02 16:00:18'),
+(3, 123, 45, 67, 'John Doe has an update in PR-001', 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -72,13 +116,12 @@ CREATE TABLE `project_list` (
   `received_bac_first` datetime DEFAULT NULL,
   `received_gso_first` datetime DEFAULT NULL,
   `procurement_type` varchar(50) DEFAULT NULL,
-  `remarks_pr_no` varchar(255) DEFAULT NULL,
   `philgeps_posting` varchar(50) DEFAULT NULL,
   `supplier` varchar(200) DEFAULT NULL,
   `contract_cost` decimal(15,2) DEFAULT NULL,
   `received_bac_second` datetime DEFAULT NULL,
   `bac_reso_no` varchar(100) DEFAULT NULL,
-  `bac_reso_date` datetime DEFAULT NULL,
+  `bac_reso_date` date DEFAULT NULL,
   `received_gso_second` datetime DEFAULT NULL,
   `po_no` varchar(100) DEFAULT NULL,
   `po_date` datetime DEFAULT NULL,
@@ -107,8 +150,11 @@ CREATE TABLE `project_list` (
 -- Dumping data for table `project_list`
 --
 
-INSERT INTO `project_list` (`id`, `status`, `start_date`, `manager_id`, `user_ids`, `date_created`, `pr_no`, `particulars`, `amount`, `mop`, `received_bac_first`, `received_gso_first`, `procurement_type`, `remarks_pr_no`, `philgeps_posting`, `supplier`, `contract_cost`, `received_bac_second`, `bac_reso_no`, `bac_reso_date`, `received_gso_second`, `po_no`, `po_date`, `air_no`, `air_date`, `received_bo_first`, `return_gso_completion`, `received_bac_third`, `rfq_no`, `reposting`, `returned_gso_abstract`, `received_bo_second`, `received_accounting_first`, `received_accounting_second`, `received_treasury_first`, `received_treasury_second`, `received_treasury_third`, `received_treasury_fourth`, `received_mo`, `received_admin`, `cheque_no`, `paid`) VALUES
-(27, 0, '2025-01-14', 0, '', '2025-11-28 16:31:08', '0018', 'Food for \"Balikbayan Day 2025\", January 24, 2025 (6:00AM) -Tanay Municipal Grounds.', 80000.00, 'Single Value Procurement', '2025-11-28 16:30:00', '2025-11-28 16:30:00', 'consolidated', NULL, 'With Posting', 'Gillan Marie Catering Services', 70000.00, '2025-11-28 16:30:00', '2025-01-0003-100', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '100-2025-0004', '2025-11-28 16:30:00', '2025-2024', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-07', 'Without Reposting', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:30:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '1231313', 'no');
+INSERT INTO `project_list` (`id`, `status`, `start_date`, `manager_id`, `user_ids`, `date_created`, `pr_no`, `particulars`, `amount`, `mop`, `received_bac_first`, `received_gso_first`, `procurement_type`, `philgeps_posting`, `supplier`, `contract_cost`, `received_bac_second`, `bac_reso_no`, `bac_reso_date`, `received_gso_second`, `po_no`, `po_date`, `air_no`, `air_date`, `received_bo_first`, `return_gso_completion`, `received_bac_third`, `rfq_no`, `reposting`, `returned_gso_abstract`, `received_bo_second`, `received_accounting_first`, `received_accounting_second`, `received_treasury_first`, `received_treasury_second`, `received_treasury_third`, `received_treasury_fourth`, `received_mo`, `received_admin`, `cheque_no`, `paid`) VALUES
+(27, 0, '2025-01-14', 0, '', '2025-11-28 16:31:08', NULL, 'Food for \"Balikbayan Day 2025\", January 24, 2025 (6:00AM) -Tanay Municipal Grounds.', 80000.00, 'Single Value Procurement', '2025-11-28 16:30:00', '2025-11-28 16:30:00', 'consolidated', 'With Posting', 'Gillan Marie Catering Services', 70000.00, '2025-11-28 16:30:00', '2025-01-0003-100', '2025-12-02', '2025-11-28 16:30:00', '100-2025-0004', '2025-11-28 16:30:00', '2025-2024', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-07', 'Without Reposting', '2025-11-28 16:30:00', '2025-11-28 16:30:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:30:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '2025-11-28 16:31:00', '', 'no'),
+(36, 0, '2025-12-02', 0, '', '2025-12-02 10:38:43', NULL, 'Meals for the Masungi Rock Management Council Meeting on January 31, 2025 at JE Camp Resort, Sampaloc, Tanay, Rizal', 481957.00, 'Single Value Procurement', '2025-12-02 15:30:00', '2025-12-02 15:30:00', 'consolidated', 'Without Posting', 'asdasd', 123123123.00, '2025-12-02 15:31:00', '1231', '2025-12-02', '2025-12-02 15:31:00', '123123', '2025-12-02 15:31:00', '123123', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', NULL, '12312', NULL, '2025-12-02 15:30:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '2025-12-02 15:31:00', '123123', 'yes'),
+(37, 0, '2025-12-02', 0, '', '2025-12-02 13:24:05', '0098', 'Food For FAMILIARIZATION TOUR: \"Balikbayan And OFWs Day Tour\", January 25, 2025.', 12311.00, 'Single Value Procurement', '2025-12-02 15:41:00', '2025-12-02 15:41:00', 'single', 'With Posting', 'ASUSTek', 10000.00, '2025-12-02 15:41:00', '12313', '2025-12-02', '2025-12-02 15:41:00', '123123', '2025-12-02 15:41:00', '123123', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '123123', 'Without Reposting', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '2025-12-02 15:41:00', '13123123', 'no'),
+(46, 0, '2025-12-03', 0, '', '2025-12-03 10:09:05', '0987', 'food', 1231.00, 'Single Value Procurement', '2025-12-03 10:09:00', '2025-12-03 10:09:00', 'single', 'With Posting', 'qasdasd', 13123123.00, '2025-12-03 10:09:00', '12313', '2025-12-03', '2025-12-03 10:26:00', '123123', '2025-12-03 10:27:00', '123123', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-12-03 10:09:00', '123', 'With Reposting', '2025-12-03 10:09:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '2025-12-03 10:09:00', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 'no');
 
 -- --------------------------------------------------------
 
@@ -154,7 +200,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `password`, `type`, `date_created`) VALUES
 (1, 'Administrator', '', 'admin@admin.com', '0192023a7bbd73250516f069df18b500', 1, '2020-11-26 10:57:04'),
-(6, 'Budget', 'Office', 'bo@user.com', '6ad14ba9986e3615423dfca256d04e3f', 2, '2025-11-21 13:28:28');
+(6, 'Budget', 'Office', 'bo@user.com', '6ad14ba9986e3615423dfca256d04e3f', 2, '2025-11-21 13:28:28'),
+(9, 'GSO', 'Office', 'gso@user.com', '6ad14ba9986e3615423dfca256d04e3f', 2, '2025-12-02 13:47:16');
 
 --
 -- Indexes for dumped tables
@@ -174,6 +221,12 @@ ALTER TABLE `comments`
 ALTER TABLE `consolidated`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_consolidated_project_id` (`project_id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `project_list`
@@ -201,19 +254,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `comments`
 --
 ALTER TABLE `comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `consolidated`
 --
 ALTER TABLE `consolidated`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `project_list`
 --
 ALTER TABLE `project_list`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `system_settings`
@@ -225,7 +284,7 @@ ALTER TABLE `system_settings`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(30) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Constraints for dumped tables

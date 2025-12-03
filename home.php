@@ -48,11 +48,15 @@
                             <?php
                             $i = 1;
                             $stat = array("Pending", "Started", "On-Progress", "On-Hold", "Over Due", "Done");
+                            include_once 'workflow_helper.php';
                             // Show documents to all users (both Admin and Employee)
                             $where = "";
                             $qry = $conn->query("SELECT * FROM project_list $where order by id asc");
                             while ($row = $qry->fetch_assoc()):
                                 $prog = 0;
+                                // Defensive defaults to avoid undefined variable notices
+                                $prod = 0;
+                                $cprog = 0;
                                 $prog = $prog > 0 ? number_format($prog, 2) : $prog;
                                 if ($row['status'] == 0 && strtotime(date('Y-m-d')) >= strtotime($row['start_date'])):
                                     if ($prod > 0 || $cprog > 0)
@@ -75,19 +79,9 @@
                                     </td>
                                     <td class="project-state">
                                         <?php
-                                        if ($stat[$row['status']] == 'Pending') {
-                                            echo "<span class='badge badge-secondary'>{$stat[$row['status']]}</span>";
-                                        } elseif ($stat[$row['status']] == 'Started') {
-                                            echo "<span class='badge badge-primary'>{$stat[$row['status']]}</span>";
-                                        } elseif ($stat[$row['status']] == 'On-Progress') {
-                                            echo "<span class='badge badge-info'>{$stat[$row['status']]}</span>";
-                                        } elseif ($stat[$row['status']] == 'On-Hold') {
-                                            echo "<span class='badge badge-warning'>{$stat[$row['status']]}</span>";
-                                        } elseif ($stat[$row['status']] == 'Over Due') {
-                                            echo "<span class='badge badge-danger'>{$stat[$row['status']]}</span>";
-                                        } elseif ($stat[$row['status']] == 'Done') {
-                                            echo "<span class='badge badge-success'>{$stat[$row['status']]}</span>";
-                                        }
+                                        // Compute workflow stage dynamically from filled fields
+                                        $ws = compute_workflow_stage($conn, $row);
+                                        echo "<span class='badge {$ws['badge']}'>" . htmlspecialchars($ws['stage'], ENT_QUOTES) . "</span>";
                                         ?>
                                     </td>
                                     <td>

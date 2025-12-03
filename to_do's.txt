@@ -4,7 +4,7 @@ Amount and Contract Cost - done
 Specify the office - done
 - what office did the document come from before receiving 
 
-Mode of Procurement
+Mode of Procurement - done
 - different form for single and consolidated
 - remove the remarks (PR no.)
 
@@ -27,51 +27,65 @@ RFQ - done
 - require all field when with posting
 
 
-received_bac_first
-received_bac_second
-received_bac_third
+Started
+'procurement_type',
+'pr_no'
+'amount'
+'start_date'
+'particulars'
+'mop'
+
+On Going
+'received_bac_first'
+'received_gso_first'
+'philgeps_posting'
+'rfq_no'
+'returned_gso_abstract'
+
+Processing
+'supplier'
+'contract_cost'
+
+BAC Reso
+'received_bac_second'
+'bac_reso_no'
+'bac_reso_date'
+
+PO
+'received_gso_second'
+'po_no'
+'po_date'
+
+AIR
+'air_no'
+'air_date'
+'received_treasury_first'
+'received_bo_first'
+
+CAFOA
+'received_bo_second'
+'return_gso_completion'
+
+DISBURSMENT
+'received_accounting_first'
+'received_treasury_second'
+'received_mo'
+'received_treasury_third'
+'received_admin'
+'received_accounting_second'
+'received_treasury_fourth'
+'cheque_no'
 
 
-received_gso_first
-received_gso_second
 
-received_bo - rename
-
-new
-received_bo_second
-
-received_accounting_first
-received_accounting_second
-
-received_treasury_first
-received_treasury_second
-received_treasury_third
-received_treasury_fourth
-
-received_mo
-received_admin
-
-cheque_no
-
-
-
-
-single
-Type of Procurement
-PR no.
-Amount
-particulars
-Mode of Procurement
-
-
-
-
-
-
-
-
-
-
+'Started' => 'badge-secondary',
+'On Going' => 'badge-primary',
+'Processing' => 'badge-primary',
+'BAC Reso' => 'badge-primary',
+'PO' => 'badge-primary',
+'AIR' => 'badge-primary',
+'CAFOA' => 'badge-primary',
+'DISBURSMENT' => 'badge-warning'
 
 
 

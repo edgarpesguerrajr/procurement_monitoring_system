@@ -42,13 +42,12 @@ if($action == 'delete_user'){
 }
 if($action == 'save_project'){
     $save = $crud->save_project();
-    if($save)
-        echo $save;
+    // Always echo the response so the client receives error strings or 0 on failure
+    echo $save;
 }
 if($action == 'delete_project'){
     $save = $crud->delete_project();
-    if($save)
-        echo $save;
+    echo $save;
 }
 if($action == 'save_progress'){
     $save = $crud->save_progress();
@@ -62,13 +61,11 @@ if($action == 'delete_progress'){
 }
 if($action == 'save_comment'){
     $save = $crud->save_comment();
-    if($save)
-        echo $save;
+    echo $save;
 }
 if($action == 'delete_comment'){
     $save = $crud->delete_comment();
-    if($save)
-        echo $save;
+    echo $save;
 }
 if($action == 'mark_notifications_read'){
     $save = $crud->mark_notifications_read();
